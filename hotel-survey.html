@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета за настаняване</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --accent: #c9a96e;
+  --accent2: #e8c99a;
+  --text: #f0ece4;
+  --muted: #888;
+  --danger: #e05c5c;
+  --success: #5cb88b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; padding: 0 16px 80px; }
+.grain { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+.container { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+header { padding: 44px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+.tag { display: inline-block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 2px; margin-bottom: 14px; }
+h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 5vw, 40px); font-weight: 600; line-height: 1.2; }
+h1 span { color: var(--accent); }
+.subtitle { margin-top: 8px; font-size: 14px; color: var(--muted); }
+.tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 10px; padding: 4px; margin-bottom: 28px; border: 1px solid var(--border); }
+.tab-btn { flex: 1; background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; padding: 10px 6px; border-radius: 7px; cursor: pointer; transition: all 0.2s; }
+.tab-btn.active { background: var(--accent); color: #0f0f0f; font-weight: 500; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* EDIT */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 18px; transition: border-color 0.2s; }
+.card:hover { border-color: #3a3a3a; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+.card-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #0f0f0f; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-title-wrap { flex: 1; }
+.room-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; }
+.room-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.icon-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 12px; }
+@media(max-width:500px){.fields-grid{grid-template-columns:1fr;}}
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.field-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; width: 100%; transition: border-color 0.2s; }
+.field-input:focus { outline: none; border-color: var(--accent); }
+.booking-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.booking-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; color: var(--accent2); font-family: 'DM Sans', sans-serif; font-size: 13px; transition: border-color 0.2s; }
+.booking-input:focus { outline: none; border-color: var(--accent); }
+.booking-link-btn { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 14px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.booking-link-btn:hover { background: var(--accent); color: #0f0f0f; }
+.add-btn { width: 100%; background: none; border: 1px dashed var(--border); color: var(--muted); border-radius: 10px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 28px; }
+.add-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(201,169,110,0.04); }
+
+/* SURVEY */
+.survey-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.survey-inner { padding: 24px; }
+.survey-q-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 6px; }
+.survey-q-sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.option-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; transition: border-color 0.2s; }
+.option-card:hover { border-color: #3a3a3a; }
+.option-name { font-family: 'Playfair Display', serif; font-size: 17px; }
+.option-desc { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.option-meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+.meta-chip { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.meta-chip span { color: var(--accent2); font-weight: 500; }
+.book-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--accent); text-decoration: none; border: 1px solid rgba(201,169,110,0.3); padding: 4px 10px; border-radius: 4px; transition: all 0.2s; margin-top: 8px; }
+.book-btn:hover { background: rgba(201,169,110,0.1); }
+.rating-row { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.rating-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.rating-btns { display: flex; gap: 8px; }
+.r-btn { width: 52px; height: 52px; border-radius: 8px; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'Playfair Display', serif; font-size: 20px; cursor: pointer; transition: all 0.18s; display: flex; align-items: center; justify-content: center; }
+.r-btn:hover { border-color: var(--accent); color: var(--accent); }
+.r-btn.selected { background: var(--accent); border-color: var(--accent); color: #0f0f0f; font-weight: 600; }
+.r-hint { font-size: 12px; color: var(--muted); margin-top: 7px; height: 16px; transition: color 0.2s; }
+.submit-wrap { display: flex; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.submit-btn { background: var(--accent); color: #0f0f0f; border: none; border-radius: 8px; padding: 13px 32px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.submit-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+.success-msg { display: none; text-align: center; padding: 56px 24px; animation: fadeIn 0.4s ease; }
+.success-msg h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--success); margin-bottom: 8px; }
+.success-msg p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.goto-results { display: inline-block; background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 8px; padding: 10px 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+.goto-results:hover { background: var(--accent); color: #0f0f0f; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+
+/* RESULTS */
+.results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.results-title { font-family: 'Playfair Display', serif; font-size: 22px; }
+.results-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.clear-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+.result-row { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 14px; transition: border-color 0.2s; }
+.result-row.winner { border-color: var(--accent); }
+.result-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.rank-badge { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.rank-1 { background: var(--accent); color: #0f0f0f; }
+.rank-2 { background: #8a8a8a; color: #0f0f0f; }
+.rank-3 { background: #7a5c3a; color: #f0ece4; }
+.rank-other { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+.result-name-wrap { flex: 1; }
+.result-name { font-family: 'Playfair Display', serif; font-size: 17px; }
+.result-score-big { font-size: 24px; font-weight: 600; color: var(--accent2); line-height: 1; }
+.result-score-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+.bar-section { margin-bottom: 10px; }
+.bar-label-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.7s ease; }
+.votes-dist { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.vote-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
+.vote-chip strong { color: var(--text); }
+.no-results { text-align: center; padding: 60px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.no-results h3 { font-family: 'Playfair Display', serif; font-size: 20px; }
+.no-results p { color: var(--muted); font-size: 14px; margin-top: 10px; }
+.resp-section { margin-top: 32px; }
+.resp-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 14px; }
+.resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.resp-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); font-weight: 400; }
+.resp-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.resp-table tr:last-child td { border-bottom: none; }
+.resp-table tr:hover td { background: rgba(255,255,255,0.02); }
+.mini-r { width: 26px; height: 26px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
+.mini-r.rated { background: rgba(201,169,110,0.15); border-color: var(--accent); color: var(--accent2); font-weight: 500; }
+.del-resp { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; transition: color 0.2s; padding: 4px; }
+.del-resp:hover { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="container">
+  <header>
+    <div class="tag">Планиране на пътуване</div>
+    <h1>Анкета за <span>настаняване</span></h1>
+    <p class="subtitle">Оценете вариантите по скала 1–5 и вижте резултатите в реално време</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('edit')">✏️ Редактиране</button>
+    <button class="tab-btn" onclick="switchTab('survey')">📋 Анкета</button>
+    <button class="tab-btn" onclick="switchTab('results')">📊 Резултати</button>
+  </div>
+
+  <!-- EDIT -->
+  <div class="tab-panel active" id="tab-edit">
+    <div id="rooms-list"></div>
+    <button class="add-btn" onclick="addRoom()"><span style="font-size:18px">＋</span> Добави вариант за стая</button>
+  </div>
+
+  <!-- SURVEY -->
+  <div class="tab-panel" id="tab-survey">
+    <div class="survey-wrap">
+      <div class="survey-inner">
+        <div class="success-msg" id="success-msg">
+          <div style="font-size:52px;margin-bottom:14px">✓</div>
+          <h2>Оценките са записани!</h2>
+          <p>Благодарим ти. Виж как се нарежда твоят избор спрямо останалите.</p>
+          <button class="goto-results" onclick="switchTab('results')">Виж резултатите →</button>
+        </div>
+        <div id="survey-body">
+          <div class="survey-q-title">Оценете всеки вариант за настаняване</div>
+          <div class="survey-q-sub">Дайте оценка от 1 до 5 на всеки вариант &nbsp;·&nbsp; 1 = не харесвам &nbsp;·&nbsp; 5 = много харесвам</div>
+          <div id="survey-options"></div>
+          <div class="submit-wrap">
+            <button class="submit-btn" onclick="submitSurvey()">Запази оценките →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="tab-panel" id="tab-results">
+    <div id="results-content"></div>
+  </div>
+</div>
+
+<script>
+let rooms = [
+  { id:1, name:'2 стаи по 2-ма човека', desc:'Две отделни двойни стаи', price:'', pricePerPerson:'', distance:'',
+    bookingUrl:'https://www.booking.com/searchresults.bg.html?ss=Bulgaria&type_of_stay=hotel&room1=A%2CA&room2=A%2CA' },
+  { id:2, name:'1 стая за 4-ма човека', desc:'Голям апартамент / квадрупъл стая', price:'', pricePerPerson:'', distance:'',
+    bookingUrl:'https://www.booking.com/searchresults.bg.html?ss=Bulgaria&type_of_stay=hotel&room1=A%2CA%2CA%2CA' }
+];
+let nextId = 3;
+let responses = [];
+let currentRatings = {};
+
+// ── EDIT ──────────────────────────────────
+function renderEdit() {
+  const list = document.getElementById('rooms-list');
+  list.innerHTML = '';
+  rooms.forEach((room, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-num">${idx+1}</div>
+        <div class="card-title-wrap">
+          <div class="room-title">Вариант ${idx+1}</div>
+          <div class="room-sub">Редактирай полетата по-долу</div>
+        </div>
+        <button class="icon-btn danger" onclick="removeRoom(${room.id})">✕</button>
+      </div>
+      <div class="fields-grid">
+        <div class="field-group">
+          <label class="field-label">Наименование</label>
+          <input class="field-input" type="text" value="${esc(room.name)}" oninput="updateField(${room.id},'name',this.value)" placeholder="напр. 2 стаи по 2-ма">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Описание</label>
+          <input class="field-input" type="text" value="${esc(room.desc)}" oninput="updateField(${room.id},'desc',this.value)" placeholder="кратко описание">
+        </div>
+        <div class="field-group">
+          <label class="field-label">💰 Цена (€ общо)</label>
+          <input class="field-input" type="number" value="${room.price}" oninput="updateField(${room.id},'price',this.value)" placeholder="напр. 240">
+        </div>
+        <div class="field-group">
+          <label class="field-label">👤 Цена (€ на човек)</label>
+          <input class="field-input" type="number" value="${room.pricePerPerson}" oninput="updateField(${room.id},'pricePerPerson',this.value)" placeholder="напр. 60">
+        </div>
+        <div class="field-group">
+          <label class="field-label">📍 Разстояние от центъра</label>
+          <input class="field-input" type="text" value="${esc(room.distance)}" oninput="updateField(${room.id},'distance',this.value)" placeholder="напр. 0.5 км">
+        </div>
+      </div>
+      <div class="booking-row">
+        <span style="font-size:12px;color:var(--muted);white-space:nowrap">🔗 Booking:</span>
+        <input class="booking-input" type="url" value="${esc(room.bookingUrl)}" oninput="updateField(${room.id},'bookingUrl',this.value)" placeholder="https://www.booking.com/...">
+        <a class="booking-link-btn" href="${esc(room.bookingUrl)}" target="_blank" id="blink-${room.id}">↗ Отвори</a>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ── SURVEY ────────────────────────────────
+function renderSurvey() {
+  currentRatings = {};
+  document.getElementById('success-msg').style.display = 'none';
+  document.getElementById('survey-body').style.display = 'block';
+  const wrap = document.getElementById('survey-options');
+  wrap.innerHTML = '';
+  rooms.forEach(room => {
+    const metas = [];
+    if (room.price)    metas.push(`<div class="meta-chip">💰 <span>${room.price} € общо</span></div>`);
+    if (room.pricePerPerson) metas.push(`<div class="meta-chip">👤 <span>${room.pricePerPerson} € / човек</span></div>`);
+    if (room.distance) metas.push(`<div class="meta-chip">📍 <span>${room.distance}</span></div>`);
+    const bookBtn = room.bookingUrl
+      ? `<a class="book-btn" href="${esc(room.bookingUrl)}" target="_blank">🏨 Резервирай в Booking ↗</a>` : '';
+    const btns = [1,2,3,4,5].map(n =>
+      `<button class="r-btn" data-room="${room.id}" data-val="${n}" onclick="setRating(${room.id},${n})">${n}</button>`
+    ).join('');
+    const card = document.createElement('div');
+    card.className = 'option-card';
+    card.innerHTML = `
+      <div class="option-name">${esc(room.name)}</div>
+      ${room.desc ? `<div class="option-desc">${esc(room.desc)}</div>` : ''}
+      <div class="option-meta">${metas.join('')}</div>
+      ${bookBtn}
+      <div class="rating-row">
+        <div class="rating-label">Оценка</div>
+        <div class="rating-btns" id="rbtn-${room.id}">${btns}</div>
+        <div class="r-hint" id="rhint-${room.id}">Изберете оценка</div>
+      </div>`;
+    wrap.appendChild(card);
+  });
+}
+
+function setRating(roomId, val) {
+  currentRatings[roomId] = val;
+  document.getElementById('rbtn-'+roomId).querySelectorAll('.r-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.val) === val);
+  });
+  const hints = ['','Изобщо не харесвам 😞','Не ми харесва 😕','Неутрален 😐','Харесва ми 🙂','Много ми харесва ⭐'];
+  const el = document.getElementById('rhint-'+roomId);
+  if (el) el.textContent = hints[val] || '';
+}
+
+function submitSurvey() {
+  const unrated = rooms.filter(r => !currentRatings[r.id]);
+  if (unrated.length) { alert('Моля, оценете всички варианти преди да продължите.'); return; }
+  responses.push({ name:'Участник '+(responses.length+1), ratings:{...currentRatings}, ts: new Date().toLocaleTimeString('bg-BG') });
+  document.getElementById('survey-body').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+}
+
+// ── RESULTS ───────────────────────────────
+function renderResults() {
+  const wrap = document.getElementById('results-content');
+  if (!responses.length) {
+    wrap.innerHTML = `<div class="no-results"><h3>Все още няма гласове</h3><p>Отиди на таб „Анкета", попълни оценките и се върни тук.</p></div>`;
+    return;
+  }
+  const stats = rooms.map(room => {
+    const votes = responses.map(r => r.ratings[room.id]).filter(Boolean);
+    const avg = votes.length ? votes.reduce((a,b)=>a+b,0)/votes.length : 0;
+    const dist = {1:0,2:0,3:0,4:0,5:0};
+    votes.forEach(v => dist[v]++);
+    return { room, avg, votes, dist };
+  }).sort((a,b) => b.avg - a.avg);
+
+  let html = `<div class="results-header">
+    <div>
+      <div class="results-title">Резултати от гласуването</div>
+      <div class="results-meta">${responses.length} ${responses.length===1?'участник':'участника'} · скала 1–5</div>
+    </div>
+    <button class="clear-btn" onclick="clearResults()">🗑 Изчисти всичко</button>
+  </div>`;
+
+  stats.forEach((s, i) => {
+    const rank = i+1;
+    const pct = (s.avg/5*100).toFixed(1);
+    const bc = rank===1?'rank-1':rank===2?'rank-2':rank===3?'rank-3':'rank-other';
+    const distHtml = [1,2,3,4,5].map(n=>{
+      const c=s.dist[n]||0;
+      return `<div class="vote-chip">${n}★ &nbsp;<strong>${c}</strong> ${c===1?'глас':'гласа'}</div>`;
+    }).join('');
+    const metas=[];
+    if(s.room.price) metas.push(`<div class="meta-chip">💰 <span>${s.room.price} € общо</span></div>`);
+    if(s.room.pricePerPerson) metas.push(`<div class="meta-chip">👤 <span>${s.room.pricePerPerson} € / човек</span></div>`);
+    if(s.room.distance) metas.push(`<div class="meta-chip">📍 <span>${s.room.distance}</span></div>`);
+    const bookB = s.room.bookingUrl?`<a class="book-btn" href="${esc(s.room.bookingUrl)}" target="_blank" style="margin-top:0">🏨 Booking ↗</a>`:'';
+    html+=`<div class="result-row${rank===1?' winner':''}">
+      <div class="result-top">
+        <div class="rank-badge ${bc}">${rank}</div>
+        <div class="result-name-wrap">
+          <div class="result-name">${esc(s.room.name)}</div>
+          ${s.room.desc?`<div style="font-size:12px;color:var(--muted);margin-top:2px">${esc(s.room.desc)}</div>`:''}
+          <div class="option-meta" style="margin-top:6px">${metas.join('')}${bookB}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="result-score-big">${s.avg.toFixed(2)}</div>
+          <div class="result-score-label">средна оценка</div>
+        </div>
+      </div>
+      <div class="bar-section">
+        <div class="bar-label-row">
+          <span style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Рейтинг</span>
+          <span style="color:var(--accent2);font-size:13px">${pct}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="votes-dist">${distHtml}</div>
+    </div>`;
+  });
+
+  // Respondents
+  html+=`<div class="resp-section"><div class="resp-title">Отговори на участниците</div>
+  <table class="resp-table"><thead><tr>
+    <th>Участник</th><th>Час</th>
+    ${rooms.map(r=>`<th>${esc(r.name.length>20?r.name.slice(0,18)+'…':r.name)}</th>`).join('')}
+    <th></th>
+  </tr></thead><tbody>`;
+  responses.forEach((resp,ri)=>{
+    html+=`<tr>
+      <td style="font-weight:500">${esc(resp.name)}</td>
+      <td style="color:var(--muted)">${resp.ts}</td>
+      ${rooms.map(r=>{const v=resp.ratings[r.id];return`<td><span class="mini-r${v?' rated':''}">${v||'–'}</span></td>`;}).join('')}
+      <td><button class="del-resp" onclick="deleteResponse(${ri})" title="Изтрий">✕</button></td>
+    </tr>`;
+  });
+  html+=`</tbody></table></div>`;
+  wrap.innerHTML = html;
+}
+
+// ── HELPERS ───────────────────────────────
+function addRoom() {
+  rooms.push({id:nextId++,name:'Нов вариант',desc:'',price:'',pricePerPerson:'',distance:'',bookingUrl:''});
+  renderEdit();
+}
+function removeRoom(id) {
+  if(rooms.length<=1){alert('Трябва поне един вариант.');return;}
+  rooms=rooms.filter(r=>r.id!==id); renderEdit();
+}
+function updateField(id,field,val) {
+  const r=rooms.find(r=>r.id===id);if(!r)return;
+  r[field]=val;
+  if(field==='bookingUrl'){const b=document.getElementById('blink-'+id);if(b)b.href=val;}
+}
+function clearResults() {
+  if(!confirm('Сигурен ли си? Всички гласове ще бъдат изтрити.'))return;
+  responses=[];renderResults();
+}
+function deleteResponse(idx){responses.splice(idx,1);renderResults();}
+function switchTab(tab) {
+  const tabs=['edit','survey','results'];
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===tab));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='survey')renderSurvey();
+  if(tab==='results')renderResults();
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+renderEdit();
+</script>
+</body>
+</html>
