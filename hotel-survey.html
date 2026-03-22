@@ -51,7 +51,10 @@ h1 span { color: var(--accent); }
 .survey-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .survey-inner { padding: 24px; }
 .survey-q-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 6px; }
-.survey-q-sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.survey-q-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.name-row { margin-bottom: 20px; }
+.name-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; width: 100%; transition: border-color 0.2s; }
+.name-input:focus { outline: none; border-color: var(--accent); }
 .option-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; transition: border-color 0.2s; }
 .option-card:hover { border-color: #3a3a3a; }
 .option-name { font-family: 'Playfair Display', serif; font-size: 17px; }
@@ -69,8 +72,12 @@ h1 span { color: var(--accent); }
 .r-btn.selected { background: var(--accent); border-color: var(--accent); color: #0f0f0f; font-weight: 600; }
 .r-hint { font-size: 12px; color: var(--muted); margin-top: 7px; height: 16px; }
 .submit-wrap { display: flex; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
-.submit-btn { background: var(--accent); color: #0f0f0f; border: none; border-radius: 8px; padding: 13px 32px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.submit-btn { background: var(--accent); color: #0f0f0f; border: none; border-radius: 8px; padding: 13px 32px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
 .submit-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.3); border-top-color: #0f0f0f; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+.submit-btn.loading .spinner { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .success-msg { display: none; text-align: center; padding: 56px 24px; animation: fadeIn 0.4s ease; }
 .success-msg h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--success); margin-bottom: 8px; }
 .success-msg p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
@@ -80,8 +87,8 @@ h1 span { color: var(--accent); }
 .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
 .results-title { font-family: 'Playfair Display', serif; font-size: 22px; }
 .results-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
-.clear-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-.clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+.refresh-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
 .result-row { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 14px; }
 .result-row.winner { border-color: var(--accent); }
 .result-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
@@ -101,6 +108,7 @@ h1 span { color: var(--accent); }
 .votes-dist { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
 .vote-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
 .vote-chip strong { color: var(--text); }
+.loading-results { text-align: center; padding: 60px 24px; color: var(--muted); font-size: 14px; }
 .no-results { text-align: center; padding: 60px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
 .no-results h3 { font-family: 'Playfair Display', serif; font-size: 20px; }
 .no-results p { color: var(--muted); font-size: 14px; margin-top: 10px; }
@@ -113,8 +121,6 @@ h1 span { color: var(--accent); }
 .resp-table tr:hover td { background: rgba(255,255,255,0.02); }
 .mini-r { width: 26px; height: 26px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
 .mini-r.rated { background: rgba(201,169,110,0.15); border-color: var(--accent); color: var(--accent2); font-weight: 500; }
-.del-resp { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; transition: color 0.2s; padding: 4px; }
-.del-resp:hover { color: var(--danger); }
 </style>
 </head>
 <body>
@@ -127,17 +133,12 @@ h1 span { color: var(--accent); }
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('edit')">✏️ Редактиране</button>
-    <button class="tab-btn" onclick="switchTab('survey')">📋 Анкета</button>
+    <button class="tab-btn active" onclick="switchTab('survey')">📋 Анкета</button>
     <button class="tab-btn" onclick="switchTab('results')">📊 Резултати</button>
   </div>
 
-  <div class="tab-panel active" id="tab-edit">
-    <div id="rooms-list"></div>
-    <button class="add-btn" onclick="addRoom()"><span style="font-size:18px">＋</span> Добави вариант за стая</button>
-  </div>
-
-  <div class="tab-panel" id="tab-survey">
+  <!-- SURVEY -->
+  <div class="tab-panel active" id="tab-survey">
     <div class="survey-wrap">
       <div class="survey-inner">
         <div class="success-msg" id="success-msg">
@@ -149,122 +150,58 @@ h1 span { color: var(--accent); }
         <div id="survey-body">
           <div class="survey-q-title">Оценете всеки вариант за настаняване</div>
           <div class="survey-q-sub">Дайте оценка от 1 до 5 на всеки вариант &nbsp;·&nbsp; 1 = не харесвам &nbsp;·&nbsp; 5 = много харесвам</div>
+          <div class="name-row">
+            <label class="field-label" style="display:block;margin-bottom:6px">👤 Твоето име</label>
+            <input class="name-input" type="text" id="participant-name" placeholder="напр. Мария">
+          </div>
           <div id="survey-options"></div>
           <div class="submit-wrap">
-            <button class="submit-btn" onclick="submitSurvey()">Запази оценките →</button>
+            <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">
+              <span>Запази оценките →</span>
+              <div class="spinner"></div>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- RESULTS -->
   <div class="tab-panel" id="tab-results">
-    <div id="results-content"></div>
+    <div id="results-content"><div class="loading-results">Зареждане на резултатите…</div></div>
   </div>
 </div>
 
 <script>
-let rooms = [
-  {
-    id: 1,
-    name: 'Volkshotel — Tiny Double Room',
-    desc: "A tiny room, but don't let its 12m² size fool you. It comes with a double bed, shower, toilet, TV, safe and sometimes a useless pillar in the middle of the room. But we're sure travellers on tight budgets don't mind.",
-    price: '1712',
-    pricePerPerson: '428',
-    distance: '2.5 км',
-    bookingUrl: 'https://booking.volkshotel.nl/?_gl=1*16kjkz2*_gcl_au*MjI3NDY4ODQ3LjE3NzQyMDM0MjM.*_ga*MTIyOTk4NTE4Mi4xNzc0MjAzNDIz*_ga_PTKW3XE4VZ*czE3NzQyMDM0MjAkbzEkZzEkdDE3NzQyMDM0NzckajYkbDAkaDA.'
-  },
-  {
-    id: 2,
-    name: 'Volkshotel — Quad Room',
-    desc: 'With 25m² to 29m² and four sleeping spots this room offers enough space for a family, a group of friends or a jazz quartet. There\'s a bed hanging from the ceiling, for those who like to be on top of things.',
-    price: '1376',
-    pricePerPerson: '344',
-    distance: '2.5 км',
-    bookingUrl: 'https://booking.volkshotel.nl/?_gl=1*1r1v855*_gcl_au*MjI3NDY4ODQ3LjE3NzQyMDM0MjM.*_ga*MTIyOTk4NTE4Mi4xNzc0MjAzNDIz*_ga_PTKW3XE4VZ*czE3NzQyMDM0MjAkbzEkZzEkdDE3NzQyMDM0NTkkajI0JGwwJGgw'
-  },
-  {
-    id: 3,
-    name: 'BOB W. Noord Amsterdam — 2× Studio for 2',
-    desc: '2x Studio for 2',
-    price: '1616',
-    pricePerPerson: '404',
-    distance: '2.8 км',
-    bookingUrl: 'https://bobw.co/locations/amsterdam/amsterdam-noord'
-  },
-  {
-    id: 4,
-    name: 'Numa Amsterdam Docklands',
-    desc: '1 × 1 Bedroom Apartment with Sofa Bed',
-    price: '1331',
-    pricePerPerson: '333',
-    distance: '3.7 км',
-    bookingUrl: 'https://www.booking.com/hotel/nl/yays-amsterdam-docklands.bg.html?aid=2369661&label=msn-fw1Fz2ZXqKrOjFcZBu8ucQ-79852220055824%3Atikwd-79852393960022%3Aloc-26%3Aneo%3Amte%3Alp138782%3Adec%3Acid518940867%3Aagid1277633810717504&sid=58c99ce64bb5fb37a1171d3a0c7b6cc6&all_sr_blocks=521746510_182586151_4_2_0_700745&checkin=2026-05-27&checkout=2026-05-31&dest_id=-2140479&dest_type=city&dist=0&group_adults=4&group_children=0&hapos=11&highlighted_blocks=521746510_182586151_4_2_0_700745&hpos=11&matching_block_id=521746510_182586151_4_2_0_700745&no_rooms=1&req_adults=4&req_children=0&room1=A%2CA%2CA%2CA&sb_price_type=total&sr_order=popularity&sr_pri_blocks=521746510_182586151_4_2_0_700745_133056&srepoch=1774200213&srpvid=e13f796f3b2e08bf&type=total&ucfs=1&'
-  },
-  {
-    id: 5,
-    name: 'Hotel de Munck',
-    desc: '1 × Четворна стая със собствена баня',
-    price: '1865',
-    pricePerPerson: '466',
-    distance: '1.4 км',
-    bookingUrl: 'https://www.hoteldemunck.com/en/'
-  }
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyR4eN1vj3K3a9NRJXo86fyIRlECtiTG9joCf362nKO7g6NyMyn5_Xb66BrtSiPU1lh/exec';
+
+const rooms = [
+  { id:1, name:'Volkshotel — Tiny Double Room',
+    desc:"A tiny room, but don't let its 12m² size fool you. It comes with a double bed, shower, toilet, TV, safe and sometimes a useless pillar in the middle of the room.",
+    price:'1712', pricePerPerson:'428', distance:'2.5 км',
+    bookingUrl:'https://booking.volkshotel.nl/?_gl=1*16kjkz2*_gcl_au*MjI3NDY4ODQ3LjE3NzQyMDM0MjM.*_ga*MTIyOTk4NTE4Mi4xNzc0MjAzNDIz*_ga_PTKW3XE4VZ*czE3NzQyMDM0MjAkbzEkZzEkdDE3NzQyMDM0NzckajYkbDAkaDA.' },
+  { id:2, name:'Volkshotel — Quad Room',
+    desc:"With 25m² to 29m² and four sleeping spots this room offers enough space for a family, a group of friends or a jazz quartet. There's a bed hanging from the ceiling.",
+    price:'1376', pricePerPerson:'344', distance:'2.5 км',
+    bookingUrl:'https://booking.volkshotel.nl/?_gl=1*1r1v855*_gcl_au*MjI3NDY4ODQ3LjE3NzQyMDM0MjM.*_ga*MTIyOTk4NTE4Mi4xNzc0MjAzNDIz*_ga_PTKW3XE4VZ*czE3NzQyMDM0MjAkbzEkZzEkdDE3NzQyMDM0NTkkajI0JGwwJGgw' },
+  { id:3, name:'BOB W. Noord Amsterdam — 2× Studio for 2',
+    desc:'2x Studio for 2',
+    price:'1616', pricePerPerson:'404', distance:'2.8 км',
+    bookingUrl:'https://bobw.co/locations/amsterdam/amsterdam-noord' },
+  { id:4, name:'Numa Amsterdam Docklands',
+    desc:'1 × 1 Bedroom Apartment with Sofa Bed',
+    price:'1331', pricePerPerson:'333', distance:'3.7 км',
+    bookingUrl:'https://www.booking.com/hotel/nl/yays-amsterdam-docklands.bg.html?aid=2369661&label=msn-fw1Fz2ZXqKrOjFcZBu8ucQ-79852220055824%3Atikwd-79852393960022%3Aloc-26%3Aneo%3Amte%3Alp138782%3Adec%3Acid518940867%3Aagid1277633810717504&sid=58c99ce64bb5fb37a1171d3a0c7b6cc6&checkin=2026-05-27&checkout=2026-05-31&dest_id=-2140479&dest_type=city&group_adults=4&group_children=0&no_rooms=1&room1=A%2CA%2CA%2CA&sb_price_type=total' },
+  { id:5, name:'Hotel de Munck',
+    desc:'1 × Четворна стая със собствена баня',
+    price:'1865', pricePerPerson:'466', distance:'1.4 км',
+    bookingUrl:'https://www.hoteldemunck.com/en/' }
 ];
-let nextId = 6;
-let responses = [];
+
 let currentRatings = {};
 
-function renderEdit() {
-  const list = document.getElementById('rooms-list');
-  list.innerHTML = '';
-  rooms.forEach((room, idx) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="card-num">${idx+1}</div>
-        <div class="card-title-wrap">
-          <div class="room-title">Вариант ${idx+1}</div>
-          <div class="room-sub">Редактирай полетата по-долу</div>
-        </div>
-        <button class="icon-btn danger" onclick="removeRoom(${room.id})">✕</button>
-      </div>
-      <div class="fields-grid">
-        <div class="field-group">
-          <label class="field-label">Наименование</label>
-          <input class="field-input" type="text" value="${esc(room.name)}" oninput="updateField(${room.id},'name',this.value)">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Описание</label>
-          <input class="field-input" type="text" value="${esc(room.desc)}" oninput="updateField(${room.id},'desc',this.value)">
-        </div>
-        <div class="field-group">
-          <label class="field-label">💰 Цена (€ общо)</label>
-          <input class="field-input" type="number" value="${room.price}" oninput="updateField(${room.id},'price',this.value)">
-        </div>
-        <div class="field-group">
-          <label class="field-label">👤 Цена (€ на човек)</label>
-          <input class="field-input" type="number" value="${room.pricePerPerson}" oninput="updateField(${room.id},'pricePerPerson',this.value)">
-        </div>
-        <div class="field-group">
-          <label class="field-label">📍 Разстояние от центъра</label>
-          <input class="field-input" type="text" value="${esc(room.distance)}" oninput="updateField(${room.id},'distance',this.value)">
-        </div>
-      </div>
-      <div class="booking-row">
-        <span style="font-size:12px;color:var(--muted);white-space:nowrap">🔗 Booking:</span>
-        <input class="booking-input" type="url" value="${esc(room.bookingUrl)}" oninput="updateField(${room.id},'bookingUrl',this.value)">
-        <a class="booking-link-btn" href="${esc(room.bookingUrl)}" target="_blank" id="blink-${room.id}">↗ Отвори</a>
-      </div>`;
-    list.appendChild(card);
-  });
-}
-
+// ── SURVEY ────────────────────────────────
 function renderSurvey() {
-  currentRatings = {};
-  document.getElementById('success-msg').style.display = 'none';
-  document.getElementById('survey-body').style.display = 'block';
   const wrap = document.getElementById('survey-options');
   wrap.innerHTML = '';
   rooms.forEach(room => {
@@ -303,34 +240,76 @@ function setRating(roomId, val) {
   if (el) el.textContent = hints[val] || '';
 }
 
-function submitSurvey() {
+async function submitSurvey() {
+  const name = document.getElementById('participant-name').value.trim();
+  if (!name) { alert('Моля, въведи името си.'); return; }
   const unrated = rooms.filter(r => !currentRatings[r.id]);
   if (unrated.length) { alert('Моля, оценете всички варианти преди да продължите.'); return; }
-  responses.push({ name:'Участник '+(responses.length+1), ratings:{...currentRatings}, ts: new Date().toLocaleTimeString('bg-BG') });
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  try {
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        r1: currentRatings[1],
+        r2: currentRatings[2],
+        r3: currentRatings[3],
+        r4: currentRatings[4],
+        r5: currentRatings[5]
+      })
+    });
+  } catch(e) { console.error(e); }
+
+  btn.disabled = false;
+  btn.classList.remove('loading');
   document.getElementById('survey-body').style.display = 'none';
   document.getElementById('success-msg').style.display = 'block';
 }
 
-function renderResults() {
+// ── RESULTS ───────────────────────────────
+async function loadResults() {
   const wrap = document.getElementById('results-content');
-  if (!responses.length) {
-    wrap.innerHTML = `<div class="no-results"><h3>Все още няма гласове</h3><p>Отиди на таб „Анкета", попълни оценките и се върни тук.</p></div>`;
+  wrap.innerHTML = '<div class="loading-results">⏳ Зареждане на резултатите…</div>';
+  try {
+    const res = await fetch(SHEET_URL + '?t=' + Date.now());
+    const rows = await res.json();
+    // rows[0] is header if exists, skip rows without data
+    const dataRows = rows.filter(r => r[1] && r[1] !== 'name');
+    renderResults(dataRows);
+  } catch(e) {
+    wrap.innerHTML = '<div class="no-results"><h3>Грешка при зареждане</h3><p>Провери интернет връзката и опитай пак.</p></div>';
+  }
+}
+
+function renderResults(rows) {
+  const wrap = document.getElementById('results-content');
+
+  if (!rows.length) {
+    wrap.innerHTML = `<div class="no-results"><h3>Все още няма гласове</h3><p>Попълни анкетата и се върни тук.</p></div>`;
     return;
   }
-  const stats = rooms.map(room => {
-    const votes = responses.map(r => r.ratings[room.id]).filter(Boolean);
+
+  // rows: [timestamp, name, r1, r2, r3, r4, r5]
+  const stats = rooms.map((room, idx) => {
+    const votes = rows.map(r => parseInt(r[idx + 2])).filter(v => !isNaN(v) && v > 0);
     const avg = votes.length ? votes.reduce((a,b)=>a+b,0)/votes.length : 0;
     const dist = {1:0,2:0,3:0,4:0,5:0};
-    votes.forEach(v => dist[v]++);
+    votes.forEach(v => { if(dist[v] !== undefined) dist[v]++; });
     return { room, avg, votes, dist };
   }).sort((a,b) => b.avg - a.avg);
 
   let html = `<div class="results-header">
     <div>
       <div class="results-title">Резултати от гласуването</div>
-      <div class="results-meta">${responses.length} ${responses.length===1?'участник':'участника'} · скала 1–5</div>
+      <div class="results-meta">${rows.length} ${rows.length===1?'участник':'участника'} · скала 1–5</div>
     </div>
-    <button class="clear-btn" onclick="clearResults()">🗑 Изчисти всичко</button>
+    <button class="refresh-btn" onclick="loadResults()">↻ Обнови</button>
   </div>`;
 
   stats.forEach((s, i) => {
@@ -355,7 +334,7 @@ function renderResults() {
           <div class="option-meta" style="margin-top:6px">${metas.join('')}${bookB}</div>
         </div>
         <div style="text-align:right;flex-shrink:0">
-          <div class="result-score-big">${s.avg.toFixed(2)}</div>
+          <div class="result-score-big">${s.avg > 0 ? s.avg.toFixed(2) : '—'}</div>
           <div class="result-score-label">средна оценка</div>
         </div>
       </div>
@@ -370,53 +349,34 @@ function renderResults() {
     </div>`;
   });
 
+  // Respondents table
   html += `<div class="resp-section"><div class="resp-title">Отговори на участниците</div>
   <table class="resp-table"><thead><tr>
     <th>Участник</th><th>Час</th>
-    ${rooms.map(r=>`<th>${esc(r.name.length>18?r.name.slice(0,16)+'…':r.name)}</th>`).join('')}
-    <th></th>
+    ${rooms.map(r=>`<th>${esc(r.name.length>16?r.name.slice(0,14)+'…':r.name)}</th>`).join('')}
   </tr></thead><tbody>`;
-  responses.forEach((resp,ri) => {
+  rows.forEach(row => {
     html += `<tr>
-      <td style="font-weight:500">${esc(resp.name)}</td>
-      <td style="color:var(--muted)">${resp.ts}</td>
-      ${rooms.map(r=>{const v=resp.ratings[r.id];return`<td><span class="mini-r${v?' rated':''}">${v||'–'}</span></td>`;}).join('')}
-      <td><button class="del-resp" onclick="deleteResponse(${ri})" title="Изтрий">✕</button></td>
+      <td style="font-weight:500">${esc(String(row[1]||''))}</td>
+      <td style="color:var(--muted);font-size:12px">${esc(String(row[0]||''))}</td>
+      ${rooms.map((_,idx)=>{const v=row[idx+2];return`<td><span class="mini-r${v?' rated':''}">${v||'–'}</span></td>`;}).join('')}
     </tr>`;
   });
   html += `</tbody></table></div>`;
   wrap.innerHTML = html;
 }
 
-function addRoom() {
-  rooms.push({id:nextId++,name:'Нов вариант',desc:'',price:'',pricePerPerson:'',distance:'',bookingUrl:''});
-  renderEdit();
-}
-function removeRoom(id) {
-  if(rooms.length<=1){alert('Трябва поне един вариант.');return;}
-  rooms=rooms.filter(r=>r.id!==id); renderEdit();
-}
-function updateField(id,field,val) {
-  const r=rooms.find(r=>r.id===id);if(!r)return;
-  r[field]=val;
-  if(field==='bookingUrl'){const b=document.getElementById('blink-'+id);if(b)b.href=val;}
-}
-function clearResults() {
-  if(!confirm('Сигурен ли си? Всички гласове ще бъдат изтрити.'))return;
-  responses=[];renderResults();
-}
-function deleteResponse(idx){responses.splice(idx,1);renderResults();}
 function switchTab(tab) {
-  const tabs=['edit','survey','results'];
+  const tabs = ['survey','results'];
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===tab));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='survey')renderSurvey();
-  if(tab==='results')renderResults();
+  if (tab === 'results') loadResults();
 }
+
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-renderEdit();
+renderSurvey();
 </script>
 </body>
 </html>
